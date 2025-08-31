@@ -20,7 +20,8 @@ function setup() {
     color(230, 50, 50),
     color(60, 120, 255),
     color(255, 180, 40),
-    color(0, 220, 200)
+    color(0, 220, 200),
+    color(50,23,99)
   ];
 
   pelotas = [];
