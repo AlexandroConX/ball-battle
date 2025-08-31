@@ -1,0 +1,44 @@
+body {
+  background: #000;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #fff;
+}
+
+/* Menu inicial responsive */
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 20px;
+}
+
+.ad {
+  flex: 1;
+  min-width: 100px;
+  background: #222;
+  color: #aaa;
+  padding: 10px;
+  margin: 5px;
+  text-align: center;
+}
+
+.center {
+  flex: 2;
+  min-width: 200px;
+  text-align: center;
+}
+
+/* Media query para celular */
+@media screen and (max-width: 600px) {
+  .menu {
+    flex-direction: column;
+    align-items: center;
+  }
+  .ad, .center {
+    width: 90%;
+    margin: 5px 0;
+  }
+}

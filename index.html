@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ball Battle</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Menu inicial -->
+  <div id="inicio" class="menu">
+    <div id="adLeft" class="ad">[Left ad spot 😎]</div>
+
+    <div class="center">
+      <h1>Ball Battle</h1>
+      <p>Instructions: Set the number of balls (2-7) and give them names, then press Play.</p>
+      <label for="numPelotas">Number of balls: </label>
+      <input type="number" id="numPelotas" min="2" max="7" value="6">
+      <br><br>
+      <label for="nombres">Ball names (comma separated): </label>
+      <input type="text" id="nombres" placeholder="Ball1,Ball2,...">
+      <br><br>
+      <button id="jugar">Play</button>
+    </div>
+  <br><br>
+    <div id="adRight" class="ad">[Right ad spot 😜]</div>
+  </div>
+
+  <!-- Juego -->
+  <div id="juego" style="display:none; position:relative;">
+    <!-- Ads inside game -->
+    <div id="funnyAdSide" style="position:absolute; top:10px; right:10px; background:#222; color:#aaa; padding:5px; z-index:10;">
+      [Side ad coming soon 🤡]
+    </div>
+
+    <!-- Botones -->
+    <div id="botones" style="position:absolute; top:10px; left:10px; z-index:10;">
+      <button id="restart">Restart</button>
+      <button id="backMenu">Back to Menu</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer style="text-align:center; margin-top:20px; color:#aaa;">
+    <span id="creado"></span>
+  </footer>
+<footer style="text-align:center; margin-top:20px; color:#aaa;">
+  <span id="creado"></span>
+  <br>
+  <a href="https://ko-fi.com/ballsb29" target="_blank" style="color:#ff5e5e; text-decoration:none;">
+    ☕ Donate on Ko-fi
+  </a>
+</footer>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+<script src="script.js">
+  </script>
+<script>
+    // Footer dinámico
+    const fecha = new Date(); 
+    const fechaStr = fecha.toLocaleDateString();
+    document.getElementById('creado').textContent = `Created by: ballsb29 (AlexandroConX) | ${fechaStr}`;
+
+    // Cambiar anuncios dinámicamente cada 5s
+    const ads = [
+      "[Left ad spot 😎]",
+      "[Right ad spot 😜]",
+      "[Fun ad coming soon 🤡]",
+      "[Nothing here yet 😂]"
+    ];
+    function cambiarAds() {
+      document.getElementById('adLeft').textContent = ads[Math.floor(Math.random()*ads.length)];
+      document.getElementById('adRight').textContent = ads[Math.floor(Math.random()*ads.length)];
+    }
+    setInterval(cambiarAds, 5000);
+  </script>
+</body>
+</html>
