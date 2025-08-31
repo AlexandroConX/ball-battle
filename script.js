@@ -94,7 +94,7 @@ function draw() {
 // ----- Clases -----
 class Pelota {
   constructor(x, y, r, c, nombre){
-    this.x = x; this.y = y; this.r = r; this.c = c; this.nombre = nombre;
+    this.x = x; this.y = y; this.r = min(width, height)*0.035; this.c = c; this.nombre = nombre;
     this.vx = random(-3,3); this.vy = random(-3,3);
   }
 
