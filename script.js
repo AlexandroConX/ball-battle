@@ -12,7 +12,7 @@ function setup() {
   canvas.parent('juego');
   arenaX = width/2;
   arenaY = height/2;
-  arenaR = min(width, height)/2 - 50;
+  arenaR = min(width, height)/2 - 20;
 
   let colores = [
     color(0, 200, 0),
