@@ -5,94 +5,360 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ball Battle</title>
   <link rel="stylesheet" href="style.css">
-  <!-- Script de AdSense -->
+
+  <!-- AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2924240031224841"
      crossorigin="anonymous"></script>
 </head>
 <body>
-  <!-- Menu inicial -->
+
+  <!-- Main Menu -->
   <div id="inicio" class="menu">
-    <!-- Anuncio izquierda -->
+    <!-- Left Ad -->
     <ins class="adsbygoogle"
          style="display:block"
          data-ad-client="ca-pub-2924240031224841"
          data-ad-slot="1234567890"
          data-ad-format="auto"
          data-full-width-responsive="true"></ins>
-    <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 
     <div class="center">
       <h1>Ball Battle</h1>
       <p>Instructions: Set the number of balls (2-7) and give them names, then press Play.</p>
       <label for="numPelotas">Number of balls: </label>
-      <input type="number" id="numPelotas" min="2" max="7" value="6">
-      <br><br>
+      <input type="number" id="numPelotas" min="2" max="7" value="6"><br><br>
       <label for="nombres">Ball names (comma separated): </label>
-      <input type="text" id="nombres" placeholder="Ball1,Ball2,...">
-      <br><br>
+      <input type="text" id="nombres" placeholder="Ball1,Ball2,..."><br><br>
       <button id="jugar">Play</button>
     </div>
 
-    <br><br>
-    <!-- Anuncio derecha -->
+    <!-- Right Ad -->
     <ins class="adsbygoogle"
          style="display:block"
          data-ad-client="ca-pub-2924240031224841"
          data-ad-slot="0987654321"
          data-ad-format="auto"
          data-full-width-responsive="true"></ins>
-    <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 
-  <!-- Juego -->
-  <div id="juego" style="display:none; position:relative;">
-    <!-- Anuncio dentro del juego -->
+  <!-- Game Area -->
+  <div id="juego">
     <ins class="adsbygoogle"
          style="display:inline-block; width:300px; height:250px; position:absolute; top:10px; right:10px; z-index:10;"
          data-ad-client="ca-pub-2924240031224841"
          data-ad-slot="1122334455"></ins>
-    <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 
-    <!-- Botones -->
     <div id="botones" style="position:absolute; top:10px; left:10px; z-index:10;">
       <button id="restart">Restart</button>
       <button id="backMenu">Back to Menu</button>
     </div>
   </div>
 
+  <!-- Sections -->
+  <section id="how-it-was-made">
+    <h2>How the Game Was Made</h2>
+    <p>
+      Ball Battle was developed using <strong>p5.js</strong> and pure JavaScript. 
+      Each ball has programmed behavior for speed, collisions, and bouncing.
+    </p>
+  </section>
+
+  <section id="how-to-play">
+    <h2>How to Play</h2>
+    <ol>
+      <li>Select the number of balls (2–7).</li>
+      <li>Enter ball names separated by commas.</li>
+      <li>Press <strong>Play</strong> to start.</li>
+      <li>Watch the balls move and collide.</li>
+      <li>Use the top-left buttons to restart or return to menu.</li>
+    </ol>
+  </section>
+
+  <section id="about-me">
+    <h2>About Me</h2>
+    <p>
+      Hi! I'm Alexandro, creator of Ball Battle. I study Applied Mathematics and enjoy programming interactive projects.
+    </p>
+    <p>
+      Support my work on <a href="https://ko-fi.com/ballsb29" target="_blank">Ko-fi</a>.
+    </p>
+  </section>
+
+  <section id="view-code">
+    <h2>View the Code</h2>
+    <p>Click to expand the full JavaScript code:</p>
+    
+    <div class="code-container">
+      <div class="code-header">
+        JavaScript Code
+        <span>▶</span>
+      </div>
+      <div class="code-content">
+        <pre><code class="code-js">// See script.js for full code
+          let pelotas = [];
+          let cuerdas = [];
+          let arenaX, arenaY, arenaR;
+          let lastSpeedUp;
+          let numPelotas = 6;
+          let nombresPelotas = [];
+          let gameStarted = false;
+          
+          function setup() {
+            let canvas = createCanvas(windowWidth * 0.9, windowHeight * 0.7);
+            canvas.parent('juego');
+            clear(); // Canvas transparente
+          
+            arenaX = width / 2;
+            arenaY = height / 2;
+            arenaR = min(width, height) / 2 - 20;
+          
+            let colores = [
+              color(0, 200, 0),
+              color(160, 60, 200),
+              color(230, 50, 50),
+              color(60, 120, 255),
+              color(255, 180, 40),
+              color(0, 220, 200),
+              color(255, 0, 255)
+            ];
+          
+            pelotas = [];
+            cuerdas = [];
+          
+            for (let i = 0; i < numPelotas; i++) {
+              let ang = TWO_PI / numPelotas * i;
+              let p = new Pelota(
+                arenaX + cos(ang) * 100,
+                arenaY + sin(ang) * 100,
+                20,
+                colores[i % colores.length],
+                nombresPelotas[i] || `Ball${i + 1}`
+              );
+              pelotas.push(p);
+          
+              for (let k = 0; k < 3; k++) {
+                let angC = atan2(p.y - arenaY, p.x - arenaX) + map(k, 0, 2, -0.3, 0.3);
+                let cx = arenaX + cos(angC) * arenaR;
+                let cy = arenaY + sin(angC) * arenaR;
+                cuerdas.push(new Cuerda(p, cx, cy));
+              }
+            }
+          
+            lastSpeedUp = millis();
+          }
+          
+          function draw() {
+            clear(); // Canvas transparente
+          
+            // Arena circle
+            noFill();
+            stroke(255, 200, 0, 150);
+            strokeWeight(3);
+            ellipse(arenaX, arenaY, arenaR * 2, arenaR * 2);
+          
+            if (millis() - lastSpeedUp > 1000) {
+              for (let p of pelotas) {
+                p.vx *= 1.05;
+                p.vy *= 1.05;
+              }
+              lastSpeedUp = millis();
+            }
+          
+            // Draw ropes
+            for (let i = cuerdas.length - 1; i >= 0; i--) {
+              let c = cuerdas[i];
+              c.mostrar();
+              for (let p of pelotas) {
+                if (p != c.owner && p.c != c.owner.c && c.tocaPelota(p)) {
+                  cuerdas.splice(i, 1);
+                  break;
+                }
+              }
+            }
+          
+            // Draw balls
+            for (let i = pelotas.length - 1; i >= 0; i--) {
+              let p = pelotas[i];
+              p.mover();
+              p.colisiones(pelotas);
+              p.mostrarGlow(); // Glow version
+              if (!p.tieneCuerda()) pelotas.splice(i, 1);
+            }
+          }
+          
+          // ---------------- Classes ----------------
+          class Pelota {
+            constructor(x, y, r, c, nombre) {
+              this.x = x;
+              this.y = y;
+              this.r = min(width, height) * 0.035;
+              this.c = c;
+              this.nombre = nombre;
+              this.vx = random(-3, 3);
+              this.vy = random(-3, 3);
+            }
+          
+            mover() {
+              this.x += this.vx;
+              this.y += this.vy;
+              let d = dist(this.x, this.y, arenaX, arenaY);
+              if (d + this.r >= arenaR) {
+                let ang = atan2(this.y - arenaY, this.x - arenaX);
+                let nx = cos(ang),
+                  ny = sin(ang);
+                let dot = this.vx * nx + this.vy * ny;
+                this.vx -= 2 * dot * nx;
+                this.vy -= 2 * dot * ny;
+                for (let k = 0; k < 3; k++) {
+                  let offset = map(k, 0, 2, -0.3, 0.3);
+                  let cx = arenaX + cos(ang + offset) * arenaR;
+                  let cy = arenaY + sin(ang + offset) * arenaR;
+                  cuerdas.push(new Cuerda(this, cx, cy));
+                }
+              }
+            }
+          
+            mostrarGlow() {
+              // Neon glow
+              drawingContext.shadowBlur = 20;
+              drawingContext.shadowColor = this.c.toString();
+              fill(this.c);
+              noStroke();
+              ellipse(this.x, this.y, this.r * 2, this.r * 2);
+          
+              drawingContext.shadowBlur = 0; // Reset shadow
+              fill(255);
+              textSize(12);
+              textAlign(CENTER, CENTER);
+              text(this.nombre, this.x, this.y);
+            }
+          
+            colisiones(otros) {
+              for (let o of otros) {
+                if (o != this) {
+                  let d = dist(this.x, this.y, o.x, o.y);
+                  let minD = this.r + o.r;
+                  if (d < minD) {
+                    let overlap = (minD - d) / 2;
+                    let ang = atan2(this.y - o.y, this.x - o.x);
+                    this.x += cos(ang) * overlap;
+                    this.y += sin(ang) * overlap;
+                    o.x -= cos(ang) * overlap;
+                    o.y -= sin(ang) * overlap;
+                    let tmpVx = this.vx,
+                      tmpVy = this.vy;
+                    this.vx = o.vx;
+                    this.vy = o.vy;
+                    o.vx = tmpVx;
+                    o.vy = tmpVy;
+                  }
+                }
+              }
+            }
+          
+            tieneCuerda() {
+              for (let c of cuerdas) if (c.owner == this) return true;
+              return false;
+            }
+          }
+          
+          class Cuerda {
+            constructor(owner, bx, by) {
+              this.owner = owner;
+              this.bx = bx;
+              this.by = by;
+            }
+          
+            mostrar() {
+              stroke(this.owner.c);
+              strokeWeight(2);
+              line(this.owner.x, this.owner.y, this.bx, this.by);
+            }
+          
+            tocaPelota(p) {
+              let d = this.distPointToLine(p.x, p.y, this.owner.x, this.owner.y, this.bx, this.by);
+              return d < p.r;
+            }
+          
+            distPointToLine(px, py, x1, y1, x2, y2) {
+              let A = px - x1,
+                B = py - y1,
+                C = x2 - x1,
+                D = y2 - y1;
+              let dot = A * C + B * D;
+              let len = C * C + D * D;
+              let param = len != 0 ? dot / len : -1;
+              let xx, yy;
+              if (param < 0) {
+                xx = x1;
+                yy = y1;
+              } else if (param > 1) {
+                xx = x2;
+                yy = y2;
+              } else {
+                xx = x1 + param * C;
+                yy = y1 + param * D;
+              }
+              return dist(px, py, xx, yy);
+            }
+          }
+          
+          // ---------------- Buttons ----------------
+          document.getElementById('jugar').addEventListener('click', () => {
+            let n = parseInt(document.getElementById('numPelotas').value);
+            if (n >= 2 && n <= 7) numPelotas = n;
+            nombresPelotas = document.getElementById('nombres').value.split(',');
+            document.getElementById('inicio').style.display = 'none';
+            document.getElementById('juego').style.display = 'block';
+            gameStarted = true;
+            setup();
+          });
+          
+          document.getElementById('restart').addEventListener('click', () => { setup(); gameStarted = true; });
+          document.getElementById('backMenu').addEventListener('click', () => {
+            document.getElementById('juego').style.display = 'none';
+            document.getElementById('inicio').style.display = 'flex';
+            gameStarted = false;
+          });
+          
+          // Footer dynamic date
+          document.getElementById('creado').textContent = `Created by: ballsb29 (AlexandroConX) | ${new Date().toLocaleDateString()}`;
+          
+</code></pre>
+      </div>
+    </div>
+  </section>
+  <section id="redes">
+    <h2>Follow me: </h2>
+    <div class="social-links">
+      <a href="https://www.tiktok.com/@ballsb29" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/TikTok_logo_2023.svg" alt="TikTok" />
+      </a>
+      <a href="https://youtube.com/@ballsb29?si=Rcln8M77FMY6n4yY" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/YouTube_icon_%282013-2017%29.png" alt="YouTube" />
+      </a>
+      <a href="https://www.facebook.com/ballsb29" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" />
+      </a>
+      <a href="https://www.instagram.com/ballsb29" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" />
+      </a>
+    </div>
+  </section>
+
   <!-- Footer -->
-  <footer style="text-align:center; margin-top:20px; color:#aaa;">
-    <span id="creado"></span>
+  <footer>
+    <span id="creado"></span><br>
+    <a href="https://ko-fi.com/ballsb29" target="_blank">☕ Donate on Ko-fi</a>
     <br>
-    <a href="https://ko-fi.com/ballsb29" target="_blank" style="color:#ff5e5e; text-decoration:none;">
-      ☕ Donate on Ko-fi
-    </a>
-     <br>	
-	<a href="privacidad.html" style="color:#aaa; text-decoration:none;">Privacy Policy</a>
+    <a href="privacidad.html">Privacy Policy</a>
   </footer>
 
+  <!-- Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
   <script src="script.js"></script>
-  <script>
-    // Footer dinámico
-    const fecha = new Date(); 
-    const fechaStr = fecha.toLocaleDateString();
-    document.getElementById('creado').textContent = `Created by: ballsb29 (AlexandroConX) | ${fechaStr}`;
-  </script>
-
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5ERFBDMNDF"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-5ERFBDMNDF');
-  </script>
 </body>
 </html>
